@@ -1,0 +1,117 @@
+{
+	"info": {
+		"name": "pythercis",
+		"_postman_id": "eb689a9d-c901-4d5e-fb4b-d9f230eacada",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create etherCIS Session",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "username",
+						"value": "{{Username}}"
+					},
+					{
+						"key": "password",
+						"value": "{{Password}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseurl}}/rest/v1/session?username={{username}}&password={{password}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"session"
+					],
+					"query": [
+						{
+							"key": "username",
+							"value": "{{username}}",
+							"equals": true
+						},
+						{
+							"key": "password",
+							"value": "{{password}}",
+							"equals": true
+						}
+					]
+				},
+				"description": "Logs in the specified user, creating a new session in the process.\n\nA successful call will create a new OpenEHR session for the specified user. The session ID will be returned both as a JSON response to this call, as well as in the Ehr-Session HTTP response header.\n\nIn order to ensure that this newly created session is used on subsequent REST requests, the client needs to make the calls with the HTTP request header Ehr-Session value set to the session ID.\n\nExample of a successful call response:\n\n```\n{\n  \"action\": \"CREATE\",\n  \"sessionId\": \"096c9d95-c434-4c97-a7ee-59e2c521ec33\"\n}\nThe response header, with the Ehr-Session set, will look like this:\n\n{\n  \"Server\": \"Jetty(9.1.1.v20140108)\",\n  \"Transfer-Encoding\": \"chunked\",\n  \"Content-Language\": \"en-US\",\n  \"Content-Type\": \"application/json;charset=UTF-8\",\n  \"Access-Control-Allow-Origin\": \"http://localhost:8082\",\n  \"Access-Control-Expose-Headers\": \"\",\n  \"Access-Control-Allow-Credentials\": \"true\",\n  \"Ehr-Session\": \"096c9d95-c434-4c97-a7ee-59e2c521ec33\"\n}\n```\n\nValid credentials for a new etherCIS install are here: https://github.com/ethercis/ethercis/blob/master/examples/config/security/authenticate.ini"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete etherCIS Session",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Ehr-Session",
+						"value": "{{session_id}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseurl}}/rest/v1/session?Ehr-Session={{session_id}}",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"session"
+					],
+					"query": [
+						{
+							"key": "Ehr-Session",
+							"value": "{{session_id}}",
+							"equals": true
+						}
+					]
+				},
+				"description": "Deletes an open Session."
+			},
+			"response": []
+		},
+		{
+			"name": "List available etherCIS templates",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Ehr-Session",
+						"value": "{{session_id}}"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "{{baseurl}}/rest/v1/template",
+					"host": [
+						"{{baseurl}}"
+					],
+					"path": [
+						"rest",
+						"v1",
+						"template"
+					]
+				},
+				"description": "Returns a list of template ids (as a JSON object).\n\nExample of a successful call response:\n\n{\n  \"templates\": [\n    {\n      \"templateId\": \"Allergies\",\n      \"createdOn\": \"2014-03-28T11:12:51.242Z\"\n    },\n    {\n      \"templateId\": \"Vital Signs\",\n      \"createdOn\": \"2014-03-28T11:12:51.277Z\"\n    }\n  ]\n}\n"
+			},
+			"response": []
+		}
+	]
+}
