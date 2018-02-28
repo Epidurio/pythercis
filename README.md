@@ -1,15 +1,16 @@
 # PytherCIS
-Simple python bindings/client library for the Ethercis openEHR CDR and other compatible openEHR Clinical Data Repositories
+Simple python bindings/client library for the Ethercis openEHR CDR (and other compatible openEHR Clinical Data Repositories)
+
 
 ## Installation
 
-* `git clone` this repository
+`git clone` this repository
 ```
 git clone git@github.com:Epidurio/pythercis.git
 ```
-* Install an EtherCIS clinical data repository to interact with. The easiest way to get access to one of these is:
-  * use the [Code4Health Platform](https://platform.code4health.org/#/) which gives you free dev/testing access to an instance of the non-free, proprietary, Marand openEHR CDR.
-  * install an instance of the [EtherCIS](http://ethercis.org/) open source openEHR CDR locally, by following the instructions below. (note the prerequisites: [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/))
+Install an EtherCIS clinical data repository to interact with. The easiest way to get access to one of these is:
+* use the resources of the [Code4Health Platform](https://platform.code4health.org/#/), which gives you free dev/testing access to an instance of the non-free, proprietary, Marand openEHR CDR. Both EtherCIS and Marand aim to adhere to the same openEHR standards and a similar REST API design, so they are cross-compatible although no guarantee of call-for-call API-level compatibility is given.
+* install an instance of the [EtherCIS](http://ethercis.org/) open source openEHR CDR locally, by following the instructions below. (note the prerequisites: [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/))
 
 Clone the `docker-ethercis` repository
 ```
@@ -78,10 +79,10 @@ List available templates on the EtherCIS server
 ```
 >>> ehr.list_templates()
 {
-    "meta": {
-        "href": "rest/v1/template"
-    },
-    "templates": []
+  "meta": {
+      "href": "rest/v1/template"
+  },
+  "templates": []
 }
 ```
 We were of course expecting that there wouldn't be any templates there initially, but this step serves as a nice way to check everything is working fine and we'll repeat it again after we've uploaded our template, and we should see the template listed.
@@ -89,6 +90,17 @@ We were of course expecting that there wouldn't be any templates there initially
 Upload an openEHR template to the EtherCIS CDR with the relative path
 ```
 >>> ehr.upload_template('/path/to/operational/template/')
+{
+    "meta": {
+        "href": "rest/v1/template"
+    },
+    "action": "CREATE",
+    "templateId": "HDAY - Epidural Report.v0"
+}
+```
+
+List available templates on the EtherCIS server again
+```
 {
   "meta" : {
     "href" : "rest/v1/template"
