@@ -4,15 +4,15 @@ Simple python bindings/client library for the Ethercis openEHR CDR (and other co
 
 ## Installation
 
-`git clone` this repository
+Clone this repository
 ```
 git clone git@github.com:Epidurio/pythercis.git
 ```
-Install an EtherCIS clinical data repository to interact with. The easiest way to get access to one of these is:
+Install an openEHR clinical data repository to interact with. The easiest way to get access to one of these is:
 * use the resources of the [Code4Health Platform](https://platform.code4health.org/#/), which gives you free dev/testing access to an instance of the non-free, proprietary, Marand openEHR CDR. Both EtherCIS and Marand aim to adhere to the same openEHR standards and a similar REST API design, so they are cross-compatible although no guarantee of call-for-call API-level compatibility is given.
 * install an instance of the [EtherCIS](http://ethercis.org/) open source openEHR CDR locally, by following the instructions below. (note the prerequisites: [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/))
 
-Clone the `docker-ethercis` repository
+Clone the [docker-ethercis](https://github.com/operonflow/docker-ethercis) repository
 ```
 git clone https://github.com/operonflow/docker-ethercis.git
 ```
@@ -22,18 +22,23 @@ Enter the relevant directory
 cd docker-ethercis
 ```
 
-Start up Docker Compose, which will create Docker containers for the EtherCIS server and its PostgresQL database.
+Start up Docker Compose, which will orchestrate the creation and setup of Docker containers for the EtherCIS server and its PostgresQL database. If all goes well, it's a single command to set up the full EtherCIS stack.
 ```
 docker-compose up
 ```
-
 After the startup procedure, you should see a message from the EtherCIS server to say it is 'listening' on some random URL like 'host:67e9af32b8a4 port:8080', which is an internal Docker reference. You should be able to access the server on `localhost:8080`.
 
 Now set up your PytherCIS client:
 
-`cd ..` to get back up into the parent directory
+```
+cd ..
+```
+to get back up into the parent directory
 
-`cd pythercis` to enter the cloned PytherCIS directory
+```
+cd pythercis
+```
+to enter the cloned PytherCIS directory
 
 Now follow the rest of the Getting Started tutorial below
 
@@ -53,7 +58,7 @@ Instantiate an Ethercis object and set the base URL of the Ethercis server
 >>> ehr = pythercis.Pythercis('http://localhost:8080')
 ```
 
-Authenticate to the EtherCIS server with a username and password (a list of valid passwords for a vanilla EtherCIS install are [here](https://github.com/ethercis/ethercis/blob/master/examples/config/security/authenticate.ini)). The following combination (root/secret)should work.
+Authenticate to the EtherCIS server with a username and password (a list of valid [Spaceballs](https://en.wikipedia.org/wiki/Spaceballs)-inspired passwords for a vanilla EtherCIS install are [here](https://github.com/ethercis/ethercis/blob/master/examples/config/security/authenticate.ini)). The following combination (root/secret)should work.
 ```
 >>> session = ehr.create_session('root', 'secret')
 {

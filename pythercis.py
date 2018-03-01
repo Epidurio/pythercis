@@ -55,12 +55,12 @@ class Pythercis:
         return response
 
     def delete_template(self, template_id):
-        # this HTTP verb doesn't seem to be impmlemented in EtherCIS??
+        # this HTTP verb doesn't seem to be implemented in EtherCIS??
         api_path = "/rest/v1/template"
         headers = {
             'Ehr-Session': self.session_id,
             }
-        response = requests.post(self.baseurl + api_path, headers=headers, files=files)
+        response = requests.post(self.baseurl + api_path, headers=headers)
         print(response.text)
         return response
 
@@ -69,6 +69,6 @@ class Pythercis:
         headers = {
             'Ehr-Session': self.session_id,
             }
-        response = requests.post(self.baseurl + api_path, headers=headers, files=files)
+        response = requests.post(self.baseurl + api_path, headers=headers)
         print(response.text)
         return response
