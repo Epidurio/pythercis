@@ -46,7 +46,7 @@ Now follow the rest of the Getting Started tutorial below
 ## Getting Started: usage from the Python shell
 As an example, I am describing usage in the interactive Python shell. Depending on your platform, there can be different ways to access the Python Shell. Consult the [Python docs](https://www.python.org/downloads/) for more help
 
-```
+```python
 ╰─$ python
 Python 3.5.2
 Type "help", "copyright", "credits" or "license" for more information.
@@ -54,12 +54,12 @@ Type "help", "copyright", "credits" or "license" for more information.
 ```
 
 Instantiate an Ethercis object and set the base URL of the Ethercis server
-```
+```python
 >>> ehr = pythercis.Pythercis('http://localhost:8080')
 ```
 
 Authenticate to the EtherCIS server with a username and password (a list of valid [Spaceballs](https://en.wikipedia.org/wiki/Spaceballs)-inspired passwords for a vanilla EtherCIS install are [here](https://github.com/ethercis/ethercis/blob/master/examples/config/security/authenticate.ini)). The following combination (root/secret)should work.
-```
+```python
 >>> session = ehr.create_session('root', 'secret')
 {
   "meta" : {
@@ -80,7 +80,7 @@ openEHR CDRs don't come with any templates out of the box, so in order to do any
 There are some example openEHR templates in the `operational_templates/` subdirectory of this repository. The technical template artefact that is uploaded is called an Operational Template, and these can also be created by exporting an operational template from the [openEHR Template Designer](https://www.openehr.org/downloads/modellingtools) UI.
 
 List available templates on the EtherCIS server
-```
+```python
 >>> ehr.list_templates()
 {
   "meta": {
@@ -92,7 +92,7 @@ List available templates on the EtherCIS server
 We were of course expecting that there wouldn't be any templates there initially, but this step serves as a nice way to check everything is working fine and we'll repeat it again after we've uploaded our template, and we should see the template listed.
 
 Upload an openEHR template to the EtherCIS CDR with the relative path
-```
+```python
 >>> ehr.upload_template('/path/to/operational/template/')
 {
     "meta": {
@@ -104,7 +104,8 @@ Upload an openEHR template to the EtherCIS CDR with the relative path
 ```
 
 List available templates on the EtherCIS server again
-```
+```python
+>>> ehr.list_templates()
 {
   "meta" : {
     "href" : "rest/v1/template"
