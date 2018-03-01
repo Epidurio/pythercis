@@ -13,29 +13,30 @@ Install an openEHR clinical data repository to interact with. The easiest way to
 * install an instance of the [EtherCIS](http://ethercis.org/) open source openEHR CDR locally, by following the instructions below. (note the prerequisites: [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/))
 
 Clone the [docker-ethercis](https://github.com/operonflow/docker-ethercis) repository
-```
+```bash
 git clone https://github.com/operonflow/docker-ethercis.git
 ```
 
 Enter the relevant directory
-```
+```bash
 cd docker-ethercis
 ```
 
 Start up Docker Compose, which will orchestrate the creation and setup of Docker containers for the EtherCIS server and its PostgresQL database. If all goes well, it's a single command to set up the full EtherCIS stack.
-```
+```bash
 docker-compose up
 ```
 After the startup procedure, you should see a message from the EtherCIS server to say it is 'listening' on some random URL like 'host:67e9af32b8a4 port:8080', which is an internal Docker reference. You should be able to access the server on `localhost:8080`.
 
-Now set up your PytherCIS client:
+Now set up your PytherCIS client
 
-```
+Type:
+```bash
 cd ..
 ```
 to get back up into the parent directory
-
-```
+then:
+```bash
 cd pythercis
 ```
 to enter the cloned PytherCIS directory
@@ -77,7 +78,10 @@ You should get back a JSON response in the python shell, containing a `sessionId
 ## Setting up openEHR Templates
 openEHR CDRs don't come with any templates out of the box, so in order to do anything useful with the CDR, you'll need to upload a template or set of temlpates. This step is akin to running a schema against a conventional database, or running a migration in a web framework's ORM. Templates are uploaded via the REST API.
 
-There are some example openEHR templates in the `operational_templates/` subdirectory of this repository. The technical template artefact that is uploaded is called an Operational Template, and these can also be created by exporting an operational template from the [openEHR Template Designer](https://www.openehr.org/downloads/modellingtools) UI.
+There are some example openEHR templates in the `operational_templates/` subdirectory of this repository, which you can use for testing. Operational Templates can also be created by exporting an operational template from the [openEHR Template Designer](https://www.openehr.org/downloads/modellingtools) UI.
+
+This technical template artefact that is uploaded to the openEHR CDR is different to the format in which templates are designed and serialised (openEHR Templates have the file extension `.oet`). This is because the operational template wraps up all the dependencies (eg openEHR archetypes) into one file. These files have the file extension `.opt`
+
 
 List available templates on the EtherCIS server
 ```python
@@ -93,7 +97,7 @@ We were of course expecting that there wouldn't be any templates there initially
 
 Upload an openEHR template to the EtherCIS CDR with the relative path
 ```python
->>> ehr.upload_template('/path/to/operational/template/')
+>>> ehr.upload_template('/path/to/operational/template.opt')
 {
     "meta": {
         "href": "rest/v1/template"
