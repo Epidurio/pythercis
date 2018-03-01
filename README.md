@@ -46,7 +46,6 @@ As an example, I am describing usage in the interactive Python shell. Depending 
 Python 3.5.2
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import pythercis
->>> import requests
 ```
 
 Instantiate an Ethercis object and set the base URL of the Ethercis server
