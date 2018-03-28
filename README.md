@@ -1,4 +1,6 @@
-[![supported_by_apperta.png](https://github.com/AppertaFoundation/apperta-image-assets/blob/master/supported_by_apperta.png)](https://apperta.org/)        [![PyPI version](https://badge.fury.io/py/pythercis.svg)](https://pypi.org/project/pythercis/)
+![PyPI version](https://badge.fury.io/py/pythercis.svg)
+
+![supported_by_apperta.png](https://github.com/AppertaFoundation/apperta-image-assets/blob/master/supported_by_apperta.png)
 
 # PytherCIS
 Simple python bindings/client library for the Ethercis openEHR CDR (and other compatible openEHR Clinical Data Repositories)
@@ -42,39 +44,32 @@ As an example, I am describing usage in the interactive Python shell. Depending 
 ╰─$ python
 Python 3.5.2
 Type "help", "copyright", "credits" or "license" for more information.
->>> import pythercis
+>>> from pythercis import main
 ```
 
 Instantiate an Ethercis object, passing it the **base URL of the Ethercis server**, and **valid login credentials**. A list of valid [Spaceballs](https://en.wikipedia.org/wiki/Spaceballs)-inspired passwords for a vanilla EtherCIS install are [here](https://github.com/ethercis/ethercis/blob/master/examples/config/security/authenticate.ini). The following combination ('root'/'secret')should work on a vanilla install.
 
 ```python
->>> ehr = pythercis.Pythercis(baseurl='http://localhost:8080', username='root', password='secret')
+>>> ehr = main.Pythercis(baseurl='http://localhost:8080', username='root', password='secret')
 )
 ```
+This creates the session and sets up your connection to the EtherCIS server in one command
 
+You should get back a JSON response in the python shell, containing a `sessionId`, which tells you that you are authenticated to the server. This `sessionId` is needed for all your future interactions with the EtherCIS server.
+
+PytherCIS will cache this sessionId for you and pass it into the HTTP headers of all future interactions automatically. You can also access it via the method `Pythercis.session_id`.
 
 ```python
->>> session = ehr.create_session('root', 'secret')
-{
-"meta" : {
-"href" : "rest/v1/session?sessionId=sessionId:172.18.0.3-root-1519837236100-794709294-19"
-},
-"action" : "CREATE",
-"sessionId" : "sessionId:172.18.0.3-root-1519837236100-794709294-19"
-}
-
+>>> ehr.session_id
+'sessionId:172.18.0.3-root-152222748992-563552143-2'
 ```
-
-You should get back a JSON response in the python shell, containing a `sessionId`, which tells you that you are authenticated to the server. This `sessionId` is needed for all your future interactions with the EtherCIS server. PytherCIS will cache this sessionId for you and pass it into the HTTP headers of all future interactions automatically. You can also access it via the method `Pythercis.session_id`.
-
 
 ## Setting up openEHR Templates
 openEHR CDRs don't come with any templates out of the box, so in order to do anything useful with the CDR, you'll need to upload a template or set of temlpates. This step is akin to running a schema against a conventional database, or running a migration in a web framework's ORM. Templates are uploaded via the REST API.
 
-There are some example openEHR templates in the `operational_templates/` subdirectory of this repository, which you can use for testing. Operational Templates can also be created by exporting an operational template from the [openEHR Template Designer](https://www.openehr.org/downloads/modellingtools) UI.
+There are some example openEHR templates in the `operational_templates/` subdirectory of this repository, which you can use for testing. Operational Templates can also be created by exporting them from the [openEHR Template Designer](https://www.openehr.org/downloads/modellingtools) UI.
 
-This technical template artefact that is uploaded to the openEHR CDR is different to the format in which templates are designed and serialised (openEHR Templates have the file extension `.oet`). This is because the operational template wraps up all the dependencies (eg openEHR archetypes) into one file. These files have the file extension `.opt`
-
+The `.opt` 'technical' template artefact that is uploaded to the openEHR CDR is different to the `.oet` format in which templates are designed and serialised normally. Operational Template wrap up all the archetype dependencies (eg openEHR archetypes) into one file.
 
 List available templates on the EtherCIS server
 ```python
@@ -86,7 +81,8 @@ List available templates on the EtherCIS server
 "templates": []
 }
 ```
-We were of course expecting that there wouldn't be any templates there initially, but this step serves as a nice way to check everything is working fine and we'll repeat it again after we've uploaded our template, and we should see the template listed.
+
+We were, of course, _expecting_ that there wouldn't be any templates there initially - this step serves as a nice way to check everything is working fine and we'll repeat it again after we've uploaded our template, and we should see the newly-uploaded template listed.
 
 Upload an openEHR template to the EtherCIS CDR with the relative path
 ```python
