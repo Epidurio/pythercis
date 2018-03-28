@@ -1,6 +1,4 @@
-![PyPI version](https://badge.fury.io/py/pythercis.svg)
-
-![supported_by_apperta.png](https://github.com/AppertaFoundation/apperta-image-assets/blob/master/supported_by_apperta.png)
+[![supported_by_apperta.png](https://github.com/AppertaFoundation/apperta-image-assets/blob/master/supported_by_apperta.png)](https://apperta.org/)        [![PyPI version](https://badge.fury.io/py/pythercis.svg)](https://pypi.org/project/pythercis/)
 
 # PytherCIS
 Simple python bindings/client library for the Ethercis openEHR CDR (and other compatible openEHR Clinical Data Repositories)
