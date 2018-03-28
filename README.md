@@ -1,16 +1,22 @@
+![PyPI version](https://badge.fury.io/py/pythercis.svg)
+
+![supported_by_apperta.png](https://github.com/AppertaFoundation/apperta-image-assets/blob/master/supported_by_apperta.png)
+
 # PytherCIS
 Simple python bindings/client library for the Ethercis openEHR CDR (and other compatible openEHR Clinical Data Repositories)
 
 
 ## Installation
 
-Clone this repository
+Install PytherCIS from the Python Package Index (PyPI) using `pip`
+```bash
+pip install pythercis
 ```
-git clone git@github.com:Epidurio/pythercis.git
-```
+
 Install an openEHR clinical data repository to interact with. The easiest way to get access to one of these is:
 * use the resources of the [Code4Health Platform](https://platform.code4health.org/#/), which gives you free dev/testing access to an instance of the non-free, proprietary, Marand openEHR CDR. Both EtherCIS and Marand aim to adhere to the same openEHR standards and a similar REST API design, so they are cross-compatible although no guarantee of call-for-call API-level compatibility is given.
 * install an instance of the [EtherCIS](http://ethercis.org/) open source openEHR CDR locally, by following the instructions below. (note the prerequisites: [Docker](https://docs.docker.com/install/) and [Docker Compose](https://docs.docker.com/compose/))
+
 
 Clone the [docker-ethercis](https://github.com/operonflow/docker-ethercis) repository
 ```bash
@@ -28,20 +34,7 @@ docker-compose up
 ```
 After the startup procedure, you should see a message from the EtherCIS server to say it is 'listening' on some random URL like 'host:67e9af32b8a4 port:8080', which is an internal Docker reference. You should be able to access the server on `localhost:8080`.
 
-Now set up your PytherCIS client
-
-Type:
-```bash
-cd ..
-```
-to get back up into the parent directory
-then:
-```bash
-cd pythercis
-```
-to enter the cloned PytherCIS directory
-
-Now follow the rest of the Getting Started tutorial below
+You now have PytherCIS (the Python bindings for your CDR) and EtherCIS (the CDR) installed and ready to use.
 
 
 ## Getting Started: usage from the Python shell
@@ -54,20 +47,22 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> import pythercis
 ```
 
-Instantiate an Ethercis object and set the base URL of the Ethercis server
+Instantiate an Ethercis object, passing it the **base URL of the Ethercis server**, and **valid login credentials**. A list of valid [Spaceballs](https://en.wikipedia.org/wiki/Spaceballs)-inspired passwords for a vanilla EtherCIS install are [here](https://github.com/ethercis/ethercis/blob/master/examples/config/security/authenticate.ini). The following combination ('root'/'secret')should work on a vanilla install.
+
 ```python
->>> ehr = pythercis.Pythercis('http://localhost:8080')
+>>> ehr = pythercis.Pythercis(baseurl='http://localhost:8080', username='root', password='secret')
+)
 ```
 
-Authenticate to the EtherCIS server with a username and password (a list of valid [Spaceballs](https://en.wikipedia.org/wiki/Spaceballs)-inspired passwords for a vanilla EtherCIS install are [here](https://github.com/ethercis/ethercis/blob/master/examples/config/security/authenticate.ini)). The following combination (root/secret)should work.
+
 ```python
 >>> session = ehr.create_session('root', 'secret')
 {
-  "meta" : {
-    "href" : "rest/v1/session?sessionId=sessionId:172.18.0.3-root-1519837236100-794709294-19"
-  },
-  "action" : "CREATE",
-  "sessionId" : "sessionId:172.18.0.3-root-1519837236100-794709294-19"
+"meta" : {
+"href" : "rest/v1/session?sessionId=sessionId:172.18.0.3-root-1519837236100-794709294-19"
+},
+"action" : "CREATE",
+"sessionId" : "sessionId:172.18.0.3-root-1519837236100-794709294-19"
 }
 
 ```
@@ -87,10 +82,10 @@ List available templates on the EtherCIS server
 ```python
 >>> ehr.list_templates()
 {
-  "meta": {
-      "href": "rest/v1/template"
-  },
-  "templates": []
+"meta": {
+"href": "rest/v1/template"
+},
+"templates": []
 }
 ```
 We were of course expecting that there wouldn't be any templates there initially, but this step serves as a nice way to check everything is working fine and we'll repeat it again after we've uploaded our template, and we should see the template listed.
@@ -99,11 +94,11 @@ Upload an openEHR template to the EtherCIS CDR with the relative path
 ```python
 >>> ehr.upload_template('/path/to/operational/template.opt')
 {
-    "meta": {
-        "href": "rest/v1/template"
-    },
-    "action": "CREATE",
-    "templateId": "HDAY - Epidural Report.v0"
+"meta": {
+"href": "rest/v1/template"
+},
+"action": "CREATE",
+"templateId": "HDAY - Epidural Report.v0"
 }
 ```
 
@@ -111,15 +106,43 @@ List available templates on the EtherCIS server again
 ```python
 >>> ehr.list_templates()
 {
-  "meta" : {
-    "href" : "rest/v1/template"
-  },
-  "templates" : [ {
-    "path" : "/etc/opt/ecis/knowledge/operational_templates/HDAY - Epidural Report.v0.opt",
-    "lastAccessTime" : "2018-02-28T12:18:29.911170Z[Etc/UTC]",
-    "lastModifiedTime" : "2018-02-28T12:18:29.911170Z[Etc/UTC]",
-    "templateId" : "HDAY - Epidural Report.v0",
-    "createdOn" : "2018-02-28T12:18:29.911170Z[Etc/UTC]"
-  } ]
+"meta" : {
+"href" : "rest/v1/template"
+},
+"templates" : [ {
+"path" : "/etc/opt/ecis/knowledge/operational_templates/HDAY - Epidural Report.v0.opt",
+"lastAccessTime" : "2018-02-28T12:18:29.911170Z[Etc/UTC]",
+"lastModifiedTime" : "2018-02-28T12:18:29.911170Z[Etc/UTC]",
+"templateId" : "HDAY - Epidural Report.v0",
+"createdOn" : "2018-02-28T12:18:29.911170Z[Etc/UTC]"
+} ]
 }
 ```
+
+
+## Developing PytherCIS
+Clone this repository
+```
+git clone git@github.com:Epidurio/pythercis.git
+```
+
+
+### Running the tests
+Each action in Pythercis should have tests which cover standard and 'edge-case' usage
+
+To run the test suite:
+```bash
+$ python -m unittest test.pythercis-test
+```
+or
+```bash
+$ python test/pythercis-test.py
+```
+
+### CONTRIBUTING
+We welcome contibutions of all kinds and will endeavour to solve issues and merge PRs where possible.
+* Feel free to create Issues in the Issues section.
+* To develop and contribute code:
+* Fork this repo to your own GitHub account.
+* Make your changes & commit them.
+* Submit a PR to this repo explaining the reason for the changes and why I should include them.

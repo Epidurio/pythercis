@@ -3,12 +3,17 @@ import requests
 
 class Pythercis:
 
-    def __init__(self, ethercis_baseurl):
-        self.baseurl = ethercis_baseurl
+    def __init__(self, baseurl, username, password):
+        self.baseurl = baseurl
+        # create new session
+        self.create_session(username, password)
+        self.defaultheaders = {
+            'Ehr-Session': self.session_id
+            }
 
-    def create_session(self, ethercis_username, ethercis_password):
-        self.username = ethercis_username
-        self.password = ethercis_password
+    def create_session(self, username, password):
+        self.username = username
+        self.password = password
         api_path = "/rest/v1/session"
         querystring = {
             "username": self.username,
@@ -18,10 +23,8 @@ class Pythercis:
             'username': self.username,
             'password': self.password,
             'cache-control': "no-cache",
-            'postman-token': "f5fefaa7-d9b4-2595-ecd6-a99dcc0f96b3"
             }
         response = requests.post(self.baseurl + api_path, headers=headers, params=querystring)
-        print(response.text)
         self.session_id = response.headers['Ehr-Session']
         return response
 
@@ -31,7 +34,6 @@ class Pythercis:
             'Ehr-Session': self.session_id
             }
         response = requests.delete(self.baseurl + api_path, headers=headers)
-        print(response.text)
         return response
 
     def list_templates(self):
@@ -40,7 +42,6 @@ class Pythercis:
             'Ehr-Session': self.session_id
             }
         response = requests.get(self.baseurl + api_path, headers=headers)
-        print(response.text)
         return response
 
     def upload_template(self, template_relative_path):
@@ -51,7 +52,6 @@ class Pythercis:
             'Content-Type': 'application/xml'
             }
         response = requests.post(self.baseurl + api_path, headers=headers, files=files)
-        print(response.text)
         return response
 
     def delete_template(self, template_id):
@@ -61,7 +61,6 @@ class Pythercis:
             'Ehr-Session': self.session_id,
             }
         response = requests.post(self.baseurl + api_path, headers=headers)
-        print(response.text)
         return response
 
     def template_example(self, template_id):
@@ -70,5 +69,4 @@ class Pythercis:
             'Ehr-Session': self.session_id,
             }
         response = requests.post(self.baseurl + api_path, headers=headers)
-        print(response.text)
         return response
